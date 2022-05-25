@@ -6,5 +6,25 @@
 #include  "bst.h"
 
 BST<std::string> makeTree(const char* filename) {
-  // поместите сюда свой код
+  BST<std::string> tree;
+  std::string word = "";
+  char lower = 'a' - 'A';
+  std::ifstream file(filename);
+  if (!file) {
+    std::cout << "Error!" << std::endl;
+    return tree;
+  }
+  while (!file.eof()) {
+    char symbol = file.get();
+    if ((symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z')) {
+      if (symbol >= 'A' && symbol <= 'Z')
+        symbol += lower;
+      word += symbol;
+    } else if (word != "") {
+      tree.add(word);
+      word = "";
+    }
+  }
+  file.close();
+  return tree;
 }
