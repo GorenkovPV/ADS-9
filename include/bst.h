@@ -7,43 +7,43 @@ template<typename T>
 class BST {
  private:
   struct Node {
-    T val;
-    Node *rght;
-    Node *lft;
+    T data;
+    Node *r;
+    Node *l;
     int count;
   };
-  Node *rt;
-  Node *addNode(Node *rt, T x) {
-      if (rt == nullptr) {
-          rt = new Node;
-          rt->val = x;
-          rt->lft = nullptr;
-          rt->rght = nullptr;
+  Node *root;
+  Node *addNode(Node *root, T val) {
+      if (root == nullptr) {
+          root = new Node;
+          root->data = val;
+          root->l = nullptr;
+          root->r = nullptr;
       } else {
-          if (rt->val > x) rt->lft = addNode(rt->lft, x);
-          if (rt->val < x) rt->rght = addNode(rt->rght, x);
-          if (rt->val == x) (rt->count)++;
+          if (root->data > val) root->l = addNode(root->l, val);
+          if (root->data < val) root->r = addNode(root->r, val);
+          if (root->data == val) (root->count)++;
       }
-      return rt;
+      return root;
     }
 
-  int searchValue(Node* rt, T x) {
-    if (rt == nullptr) {
+  int SearchNode(Node* root, T val) {
+    if (root == nullptr) {
       return 0;
-    } else if (rt->val == x) {
-        return rt->count;
-    } else if (rt->val < x) {
-        return searchValue(rt->rght, x);
+    } else if (root->data == val) {
+        return root->count;
+    } else if (root->data < val) {
+        return SearchNode(root->r, val);
     } else {
-        return searchValue(rt->lft, x);
+        return SearchNode(root->l, val);
     }
   }
 
-  int dpth(Node* rt) {
-      if (rt == nullptr)
+  int TreeHeight(Node* root) {
+      if (root == nullptr)
         return 0;
-      if (rt->lft == nullptr && rt->rght == nullptr) return 0;
-      int rt = dpth(rt->rght), lt = dpth(rt->lft);
+      if (root->l == nullptr && root->r == nullptr) return 0;
+      int rt = TreeHeight(root->r), lt = TreeHeight(root->l);
       if (rt > lt)
         return rt + 1;
       else
@@ -51,15 +51,15 @@ class BST {
   }
 
  public:
-  BST():rt(nullptr) {}
-  void add(T x) {
-      rt = addNode(rt, x);
+  BST():root(nullptr) {}
+  void add(T val) {
+      root = addNode(root, val);
   }
   int depth() {
-      return dpth(rt);
+      return TreeHeight(root);
   }
-  int search(T x) {
-      return searchValue(rt, x) + 1;
+  int search(T val) {
+      return SearchNode(root, val) + 1;
   }
 };
 
